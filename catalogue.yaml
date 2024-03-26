@@ -25,7 +25,8 @@
       url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
       dest: /tmp
 
-  - name: create app directory
+  - name: extract catalogue 
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
+      remote_src: yes # to access the file from the target remote meachine
