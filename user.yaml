@@ -25,7 +25,7 @@
       path: /app
       state: directory
 
-  - name: downlode cataloge application
+  - name: downlode user application
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/user.zip
       dest: /tmp
@@ -62,7 +62,7 @@
       name: mongodb-org-shell
       state: present
 
-  - name: get the catagories count
+  - name: get the users count
     ansible.builtin.command: mongo --host mongodb.mydevops.online --quiet --eval 'db.getSiblingDB("users"); db.users.count()'
     register: user_count
 
