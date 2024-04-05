@@ -34,8 +34,8 @@
     args: 
       chdir: /app # to change the directory and run the command
 
-  - name: Copy shipping.service
-    ansible.bultin.copy:
+  - name: Copy shipping service
+    ansible.builtin.copy:
       src: shipping.service
       dst: /etc/systemd/system/shipping.service
 
