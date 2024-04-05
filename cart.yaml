@@ -1,5 +1,5 @@
-- name: catalogue
-  hosts: catalogue
+- name: cart
+  hosts: cart
   become: yes
   tasks: 
   - name: disable old nodejs and enable nodejs:18
@@ -27,12 +27,12 @@
 
   - name: downlode cataloge application
     ansible.builtin.get_url:
-      url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+      url: https://roboshop-builds.s3.amazonaws.com/cart.zip
       dest: /tmp
 
-  - name: extract catalogue 
+  - name: extract cart 
     ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip
+      src: /tmp/cart.zip
       dest: /app
       remote_src: yes # to access the file from the target remote meachine
 
@@ -41,42 +41,18 @@
     args: 
       chdir: /app # to change the directory and run the command
 
-  - name: copy catalogue service 
+  - name: copy cart service 
     ansible.builtin.copy:
-      src: catalogue.service
-      dest: /etc/systemd/system/catalogue.service
+      src: cart.service
+      dest: /etc/systemd/system/cart.service
 
   - name: demon reload and start
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-#lets start after data is loaded
-
-  - name: copy mongodb repo
-    ansible.builtin.copy:
-      src: mongo.repo
-      dest: /etc/yum.repos.d/mongo.repo
-
-  - name: Install mongodb client
-    ansible.builtin.package:
-      name: mongodb-org-shell
-      state: present
-
-  - name: get the catagories count
-    ansible.builtin.command: mongo --host mongodb.mydevops.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.product.count()'
-    register: product_count
-
-  # - name: print the count
-  #   ansible.builtin.debug:
-  #     msg: "product count: {{product_count}}"
-
-  - name: load catalogue data
-    ansible.builtin.command: mongo --host mongodb.mydevops.online < /app/schema/catalogue.js
-    when: product_count.stdout == "0" #keep double quots
-
-  - name: start and enable catalogue
+  - name: start and enable cart
     ansible.builtin.service:
-      name: catalogue
+      name: cart
       state: restarted
       enabled: yes
 
