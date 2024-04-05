@@ -1,18 +1,18 @@
-- name: install shipping component
+- name: Install shipping Components
   hosts: shipping
   become: yes
   vars:
     mysql_password: RoboShop@1
-  tasks:
-  - name: install maven
+  tasks: 
+  - name: Install Maven
     ansible.builtin.dnf:
       name: maven
       state: present
-
+  
   - name: create roboshop user
     ansible.builtin.user:
       name: roboshop
-
+  
   - name: Recursively remove app directory
     ansible.builtin.file:
       path: /app
@@ -23,37 +23,37 @@
       path: /app
       state: directory
 
-  - name: download shipping application
+  - name: Downlode shipping application code
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/shipping.zip
       dest: /tmp
-
+  
   - name: extract shipping application
     ansible.builtin.unarchive:
       src: /tmp/shipping.zip
       dest: /app
-      remote_src: yes
+      remote_src: yes # to access the file from the target remote meachine
 
-  - name: install dependencies
+  - name: Install dependencies 
     ansible.builtin.command: mvn clean package
-    args:
-      chdir: /app
+    args: 
+      chdir: /app # to change the directory and run the command
 
-  - name: rename jar file
+  - name: rename jar file 
     ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
-    args:
-      chdir: /app
+    args: 
+      chdir: /app # to change the directory and run the command
 
-  - name: copy shipping service
+  - name: Copy shipping service
     ansible.builtin.copy:
       src: shipping.service
       dest: /etc/systemd/system/shipping.service
 
-  - name: deamon realod and start
+  - name: demon reload and start
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: install mysql client
+  - name: Install mysql client
     ansible.builtin.dnf:
       name: mysql
       state: present
@@ -75,3 +75,9 @@
       name: shipping
       state: restarted
       enabled: yes
+
+  
+  
+
+
+  
