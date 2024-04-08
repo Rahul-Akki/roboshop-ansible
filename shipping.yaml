@@ -47,7 +47,7 @@
       src: shipping.service
       dest: /etc/systemd/system/shipping.service
 
-  - name: demon reload and start
+  - name: daemon reload and start
     ansible.builtin.system_service:
       daemon_reload: true
 
