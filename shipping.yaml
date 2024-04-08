@@ -49,7 +49,7 @@
 
   - name: demon realode and start
     ansible.builtin.system_service:
-      demon_relode: true
+      daemon_relode: true
 
   - name: install mysql client
     ansible.builtin.dnf:
